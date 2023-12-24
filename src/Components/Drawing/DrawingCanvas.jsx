@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { fabric } from "fabric";
-import { baseURL } from "../constant/util";
+import { baseURL } from "../../constant/util";
 import { IoIosSave } from "react-icons/io";
 const DrawingCanvas = ({ activeTool, color = "black" }) => {
   const [isCanvasInitialized, setIsCanvasInitialized] = useState(false);

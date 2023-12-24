@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import DrawingToolbar from "./Components/DrawingToolbar";
-import DrawingCanvas from "./Components/DrawingCanvas";
+import DrawingToolbar from "./Components/Drawing/DrawingToolbar";
+import DrawingCanvas from "./Components/Drawing/DrawingCanvas";
 
 const App = () => {
   const [activeTool, setActiveTool] = useState("");
