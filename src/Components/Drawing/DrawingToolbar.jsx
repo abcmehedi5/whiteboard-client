@@ -8,7 +8,7 @@ const DrawingToolbar = ({ setActiveTool, setColor }) => {
   };
 
   return (
-    <div className=" top-0 left-0 p-4 bg-white shadow-md w-full">
+    <div className=" top-0 left-0 p-4 bg-stone-100 shadow-md w-full">
       <div className="flex justify-around ">
         <button
           className="mr-2 p-2 border rounded flex items-center gap-2"

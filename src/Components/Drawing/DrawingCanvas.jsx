@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { fabric } from "fabric";
 import { baseURL } from "../../constant/util";
 import { IoIosSave } from "react-icons/io";
+import { imageUpload } from "../../../util/imageUpload";
 const DrawingCanvas = ({ activeTool, color = "black" }) => {
   const [isCanvasInitialized, setIsCanvasInitialized] = useState(false);
   const canvasRef = useRef(null);
@@ -85,6 +86,24 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
 
   // action area -----------------
 
+  // Convert Base64 string to a Blob
+  const base64ToBlob = (base64) => {
+    const byteCharacters = atob(base64.split(",")[1]);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, { type: "image/png" });
+  };
+
   // handle save drawing in database
   const handleSaveDrawing = async () => {
     if (!isCanvasInitialized) return;
@@ -96,29 +115,32 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
       format: "png",
       quality: 1,
     });
-    const drawingData = {
-      drawing: dataURL,
-      type: activeTool,
-      date: new Date(),
-    };
-    try {
-      const response = await fetch(`${baseURL}/api/drawing`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(drawingData),
-      });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Drawing saved:", data);
-      } else {
-        console.error("Failed to save drawing");
-      }
-    } catch (error) {
-      console.error("Error saving drawing:", error);
-    }
+    const blob = base64ToBlob(dataURL);
+
+    // upload image in image bb hosting
+    imageUpload(blob).then((imageUrl) => {
+      const formData = {
+        drawing: imageUrl,
+        type: activeTool,
+        date: new Date(),
+      };
+
+      // save drawing in database
+      fetch(
+        fetch(`${baseURL}/drawing`, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(formData),
+        })
+      )
+        .then((response) => {
+          alert("Drawing saved");
+        })
+        .catch((err) => {
+          console.log("something worng");
+        });
+    });
   };
 
   return (
@@ -128,7 +150,9 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
         onClick={() => handleSaveDrawing()}
       >
         Save
-        <span><IoIosSave/></span>
+        <span>
+          <IoIosSave />
+        </span>
       </button>
       <canvas id="drawingCanvas" width="800" height="600"></canvas>
     </div>
