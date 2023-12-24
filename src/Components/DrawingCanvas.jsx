@@ -1,7 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { fabric } from "fabric";
+import { baseURL } from "../constant/util";
 
 const DrawingCanvas = ({ activeTool, color = "black" }) => {
+  const [isCanvasInitialized, setIsCanvasInitialized] = useState(false);
+  const canvasRef = useRef(null);
+
   useEffect(() => {
     const canvas = new fabric.Canvas("drawingCanvas", {
       isDrawingMode: activeTool === "pencil" ? true : false,
@@ -11,10 +15,9 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
     canvas.freeDrawingBrush.width = 5;
 
     let isDragging = false;
+
     canvas.on("mouse:down", (options) => {
       const pointer = canvas.getPointer(options.e);
-
-      // Check if an object is already selected
       const target = canvas.findTarget(options.e);
       if (target) {
         return;
@@ -59,7 +62,7 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
           break;
       }
 
-      isDragging = true; // Set the flag to true on mouse down
+      isDragging = true;
     });
 
     canvas.on("mouse:move", () => {
@@ -69,17 +72,58 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
     });
 
     canvas.on("mouse:up", () => {
-      isDragging = false; // Reset the flag on mouse up
+      isDragging = false;
     });
 
+    canvasRef.current = canvas;
+    setIsCanvasInitialized(true);
+
     return () => {
-      // Cleanup code if necessary
       canvas.dispose();
     };
   }, [activeTool, color]);
 
+  // action area -----------------
+
+  // handle save drawing in database
+  const handleSaveDrawing = async () => {
+    if (!isCanvasInitialized) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const dataURL = canvas.toDataURL({
+      format: "png",
+      quality: 1,
+    });
+    const drawingData = {
+      drawing: dataURL,
+      type: activeTool,
+      date: new Date(),
+    };
+    try {
+      const response = await fetch(`${baseURL}/api/drawing`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(drawingData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Drawing saved:", data);
+      } else {
+        console.error("Failed to save drawing");
+      }
+    } catch (error) {
+      console.error("Error saving drawing:", error);
+    }
+  };
+
   return (
     <div className="relative border border-gray-300 h-screen">
+      <button onClick={() => handleSaveDrawing()}>Save</button>
       <canvas id="drawingCanvas" width="800" height="700"></canvas>
     </div>
   );
