@@ -3,7 +3,7 @@ import DrawingToolbar from "./Components/DrawingToolbar";
 import DrawingCanvas from "./Components/DrawingCanvas";
 
 const App = () => {
-  const [activeTool, setActiveTool] = useState(null);
+  const [activeTool, setActiveTool] = useState('rectangle');
   const [color, setColor] = useState("black");
 
   return (

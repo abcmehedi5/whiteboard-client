@@ -1,21 +1,23 @@
-// DrawingCanvas.js
 import { useEffect } from "react";
 import { fabric } from "fabric";
 
-const DrawingCanvas = ({ activeTool, color }) => {
+const DrawingCanvas = ({ activeTool, color = "black" }) => {
   useEffect(() => {
     const canvas = new fabric.Canvas("drawingCanvas", {
-      isDrawingMode: false, // Start with drawing mode off
+      isDrawingMode: false,
     });
 
     // Set initial brush properties
     canvas.freeDrawingBrush.color = color;
     canvas.freeDrawingBrush.width = 5;
 
+    // Remove previous event listeners
+    canvas.off("mouse:down");
+
     // Event listener for mouse down
     canvas.on("mouse:down", (options) => {
+      console.log("Active tool in mouse down:", activeTool);
       const pointer = canvas.getPointer(options.e);
-
       switch (activeTool) {
         case "line":
           const points = [pointer.x, pointer.y, pointer.x, pointer.y];
@@ -47,15 +49,14 @@ const DrawingCanvas = ({ activeTool, color }) => {
             fontSize: 20,
           });
           canvas.add(text);
-          text.enterEditing(); // Start editing text immediately
-          text.hiddenTextarea.focus(); // Focus on text input
+          text.enterEditing();
+          text.hiddenTextarea.focus();
           break;
 
         default:
           break;
       }
     });
-
   }, [activeTool, color]);
 
   return (
