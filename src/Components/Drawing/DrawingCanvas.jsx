@@ -3,6 +3,7 @@ import { fabric } from "fabric";
 import { baseURL } from "../../constant/util";
 import { IoIosSave } from "react-icons/io";
 import { imageUpload } from "../../../util/imageUpload";
+import toast from "react-hot-toast";
 const DrawingCanvas = ({ activeTool, color = "black" }) => {
   const [isCanvasInitialized, setIsCanvasInitialized] = useState(false);
   const canvasRef = useRef(null);
@@ -135,10 +136,10 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
         })
       )
         .then((response) => {
-          alert("Drawing saved");
+          toast.success("Drawing saved");
         })
         .catch((err) => {
-          console.log("something worng");
+          toast.error("something worng");
         });
     });
   };

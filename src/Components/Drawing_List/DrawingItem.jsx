@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../../constant/util";
 import DrawingCard from "./DrawingCard";
+import toast from "react-hot-toast";
 const DrawingList = () => {
   const [drawings, setDrawings] = useState([]);
   const [reFetch, setReFetch] = useState(false);
@@ -22,14 +23,13 @@ const DrawingList = () => {
     })
       .then((res) => {
         if (res.ok) {
-          alert("delete successfull");
+          toast.success("delete successfull");
           setReFetch(true);
         }
       })
       .catch((err) => {
-        alert("something worng");
+        toast.error("something worng");
       });
-    console.log(id);
   };
   return (
     <div>
