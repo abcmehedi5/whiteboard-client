@@ -7,17 +7,19 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
       isDrawingMode: false,
     });
 
-    // Set initial brush properties
     canvas.freeDrawingBrush.color = color;
     canvas.freeDrawingBrush.width = 5;
 
-    // Remove previous event listeners
-    canvas.off("mouse:down");
-
-    // Event listener for mouse down
+    let isDragging = false; 
     canvas.on("mouse:down", (options) => {
-      console.log("Active tool in mouse down:", activeTool);
       const pointer = canvas.getPointer(options.e);
+
+      // Check if an object is already selected
+      const target = canvas.findTarget(options.e);
+      if (target) {
+        return; 
+      }
+
       switch (activeTool) {
         case "line":
           const points = [pointer.x, pointer.y, pointer.x, pointer.y];
@@ -56,12 +58,29 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
         default:
           break;
       }
+
+      isDragging = true; // Set the flag to true on mouse down
     });
+
+    canvas.on("mouse:move", () => {
+      if (isDragging) {
+        // Handle drawing or resizing if necessary
+      }
+    });
+
+    canvas.on("mouse:up", () => {
+      isDragging = false; // Reset the flag on mouse up
+    });
+
+    return () => {
+      // Cleanup code if necessary
+      canvas.dispose();
+    };
   }, [activeTool, color]);
 
   return (
     <div className="relative border border-gray-300 h-screen">
-      <canvas id="drawingCanvas" width="800" height="600"></canvas>
+      <canvas id="drawingCanvas" width="800" height="700"></canvas>
     </div>
   );
 };

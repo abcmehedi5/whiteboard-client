@@ -1,5 +1,6 @@
 const DrawingToolbar = ({ setActiveTool, setColor }) => {
   const handleSetActiveTool = (tool) => {
+
     setActiveTool(tool);
   };
 
