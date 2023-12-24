@@ -9,7 +9,14 @@ const DrawingCard = ({ drawing }) => {
         <img src={drawing.drawing} className="h-12, w-12 border-1" />
         <div>
           <h4 className="text-lg">{drawing?.type}</h4>
-          <h6 className="text-sm text-gray-400">{drawing?.date}</h6>
+          <h6 className="text-sm text-gray-400">
+            {new Date(drawing?.date)
+              .toISOString()
+              .split("T")[0]
+              .split("-")
+              .reverse()
+              .join("/")}
+          </h6>
         </div>
       </div>
       <button>
