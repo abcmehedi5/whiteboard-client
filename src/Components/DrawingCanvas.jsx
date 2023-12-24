@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { fabric } from "fabric";
 import { baseURL } from "../constant/util";
-
+import { IoIosSave } from "react-icons/io";
 const DrawingCanvas = ({ activeTool, color = "black" }) => {
   const [isCanvasInitialized, setIsCanvasInitialized] = useState(false);
   const canvasRef = useRef(null);
@@ -123,8 +123,14 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
 
   return (
     <div className="relative border border-gray-300 h-screen">
-      <button onClick={() => handleSaveDrawing()}>Save</button>
-      <canvas id="drawingCanvas" width="800" height="700"></canvas>
+      <button
+        className="bg-slate-500 p-2  text-white rounded flex items-center absolute end-3  top-3 gap-1"
+        onClick={() => handleSaveDrawing()}
+      >
+        Save
+        <span><IoIosSave/></span>
+      </button>
+      <canvas id="drawingCanvas" width="800" height="600"></canvas>
     </div>
   );
 };
