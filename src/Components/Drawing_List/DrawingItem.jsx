@@ -5,14 +5,17 @@ import toast from "react-hot-toast";
 const DrawingList = () => {
   const [drawings, setDrawings] = useState([]);
   const [reFetch, setReFetch] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // fetch all list items
   useEffect(() => {
+    setLoading(true);
     fetch(`${baseURL}/drawing`)
       .then((res) => res.json())
       .then((data) => {
         setDrawings(data);
         setReFetch(false);
+        setLoading(false);
       });
   }, [reFetch]);
 
@@ -34,7 +37,12 @@ const DrawingList = () => {
   return (
     <div>
       {drawings?.map((drawing, key) => (
-        <DrawingCard drawing={drawing} handleDelete={handleDelete} key={key} />
+        <DrawingCard
+          loading={loading}
+          drawing={drawing}
+          handleDelete={handleDelete}
+          key={key}
+        />
       ))}
     </div>
   );
