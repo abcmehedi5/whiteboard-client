@@ -2,10 +2,19 @@ import React from "react";
 
 import { MdDelete } from "react-icons/md";
 
-const DrawingCard = ({ drawing }) => {
+const DrawingCard = ({ drawing, handleDelete }) => {
+  const handleList = (id) => {
+    console.log(id);
+  };
+
   return (
-    <div className="bg-slate-200 shadow my-3 p-1 flex justify-between items-center">
-      <div className="flex gap-3 items-center">
+    <div className="bg-slate-200 shadow my-3 p-1 flex justify-between items-center cursor-pointer">
+      <div
+        className="flex gap-3 items-center"
+        onClick={() => {
+          handleList(drawing?._id);
+        }}
+      >
         <img src={drawing.drawing} className="h-12, w-12 border-1" />
         <div>
           <h4 className="text-lg">{drawing?.type}</h4>
@@ -19,7 +28,11 @@ const DrawingCard = ({ drawing }) => {
           </h6>
         </div>
       </div>
-      <button>
+      <button
+        onClick={() => {
+          handleDelete(drawing?._id);
+        }}
+      >
         <MdDelete
           style={{
             fontSize: "20px",
