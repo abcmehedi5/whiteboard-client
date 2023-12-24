@@ -4,20 +4,20 @@ import { fabric } from "fabric";
 const DrawingCanvas = ({ activeTool, color = "black" }) => {
   useEffect(() => {
     const canvas = new fabric.Canvas("drawingCanvas", {
-      isDrawingMode: false,
+      isDrawingMode: activeTool === "pencil" ? true : false,
     });
 
     canvas.freeDrawingBrush.color = color;
     canvas.freeDrawingBrush.width = 5;
 
-    let isDragging = false; 
+    let isDragging = false;
     canvas.on("mouse:down", (options) => {
       const pointer = canvas.getPointer(options.e);
 
       // Check if an object is already selected
       const target = canvas.findTarget(options.e);
       if (target) {
-        return; 
+        return;
       }
 
       switch (activeTool) {

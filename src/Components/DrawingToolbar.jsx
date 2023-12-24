@@ -8,9 +8,9 @@ const DrawingToolbar = ({ setActiveTool, setColor }) => {
     <div className="fixed top-0 left-0 p-4 bg-white shadow-md">
       <button
         className="mr-2 p-2 border rounded"
-        onClick={() => handleSetActiveTool("line")}
+        onClick={() => handleSetActiveTool("pencil")}
       >
-        Line
+        Pencil
       </button>
       <button
         className="mr-2 p-2 border rounded"
