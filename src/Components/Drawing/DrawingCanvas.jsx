@@ -4,6 +4,7 @@ import { baseURL } from "../../constant/util";
 import { IoIosSave } from "react-icons/io";
 import { imageUpload } from "../../../util/imageUpload";
 import toast from "react-hot-toast";
+import { IoTrash } from "react-icons/io5";
 const DrawingCanvas = ({ activeTool, color, onSaveDrawing }) => {
   const [isCanvasInitialized, setIsCanvasInitialized] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -150,18 +151,38 @@ const DrawingCanvas = ({ activeTool, color, onSaveDrawing }) => {
     });
   };
 
+  // clear canvas handler
+
+  const handleClearCanvas = () => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.clear();
+    }
+  };
+  
   return (
-    <div className="relative border border-gray-300 h-screen">
-      <button
-        disabled={loading}
-        className="bg-slate-500 p-2  text-white rounded flex items-center absolute end-3  top-3 gap-1"
-        onClick={() => handleSaveDrawing()}
-      >
-        {loading ? "Loading..." : "Save"}
-        <span>
-          <IoIosSave />
-        </span>
-      </button>
+    <div className="relative border border-gray-300 h-screen ">
+      <div className="absolute end-3  flex top-3 gap-4">
+        <button
+          disabled={loading}
+          className="bg-slate-500 p-2  text-white rounded flex items-center gap-2 "
+          onClick={() => handleSaveDrawing()}
+        >
+          {loading ? "Loading..." : "Save"}
+          <span>
+            <IoIosSave />
+          </span>
+        </button>
+        <button
+          className="p-2 rounded bg-red-500 text-white flex items-center gap-2"
+          onClick={handleClearCanvas}
+        >
+          Clear{" "}
+          <span>
+            <IoTrash />
+          </span>
+        </button>
+      </div>
       <canvas id="drawingCanvas" width="800" height="600"></canvas>
     </div>
   );
