@@ -18,6 +18,12 @@ const DrawingList = ({ reFetch }) => {
       .then((data) => {
         setDrawings(data);
         setLoading(false);
+      })
+      .catch((err) => {
+        toast.error("there was a server side error");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [reFetch]);
 
@@ -72,25 +78,33 @@ const DrawingList = ({ reFetch }) => {
   };
 
   return (
-    <div>
-      {drawings?.map((drawing, key) => (
-        <DrawingCard
-          loading={loading}
-          drawing={drawing}
-          handleDelete={handleDelete}
-          handleUpdateModal={handleUpdateModal}
-          key={key}
-        />
-      ))}
-      {/* drawing update modal */}
-      <DrawingUpdateModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        closeModal={closeModal}
-        handleUpdate={handleUpdate}
-        handleUpdateModal={handleUpdateModal}
-      />
-    </div>
+    <>
+      {loading ? (
+        <div className="text-center">
+          <h3 className="mt-4">Loading...</h3>
+        </div>
+      ) : (
+        <div>
+          {drawings?.map((drawing, key) => (
+            <DrawingCard
+              loading={loading}
+              drawing={drawing}
+              handleDelete={handleDelete}
+              handleUpdateModal={handleUpdateModal}
+              key={key}
+            />
+          ))}
+          {/* drawing update modal */}
+          <DrawingUpdateModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            closeModal={closeModal}
+            handleUpdate={handleUpdate}
+            handleUpdateModal={handleUpdateModal}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
