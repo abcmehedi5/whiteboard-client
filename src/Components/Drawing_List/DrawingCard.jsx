@@ -8,14 +8,20 @@ import ListSkeleton from "../common/Skeleton/List_skeleton";
 const DrawingCard = ({ drawing, handleDelete, loading }) => {
   const [singleDrawing, setSingleDrawing] = useState({});
   const [isOpen, setIsOpen] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
 
   // get single drawing data after click the drawing list
   const handleList = (id) => {
+    setLoadingModal(true);
     fetch(`${baseURL}/drawing/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setSingleDrawing(data);
-        openModal()
+        setLoadingModal(false);
+        openModal();
+      })
+      .catch((err) => {
+        setLoadingModal(false);
       });
   };
 
@@ -52,6 +58,11 @@ const DrawingCard = ({ drawing, handleDelete, loading }) => {
               </h6>
             </div>
           </div>
+          <h1>
+            {loadingModal && (
+              <span className="text-gray-400">Please Wait..</span>
+            )}
+          </h1>
           <button
             onClick={() => {
               handleDelete(drawing?._id);

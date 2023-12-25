@@ -119,7 +119,6 @@ const DrawingCanvas = ({ activeTool, color, onSaveDrawing }) => {
       format: "png",
       quality: 1,
     });
-
     const blob = base64ToBlob(dataURL);
 
     // upload image in image bb hosting
@@ -142,7 +141,9 @@ const DrawingCanvas = ({ activeTool, color, onSaveDrawing }) => {
           setLoading(false);
           toast.success("Drawing saved");
           // refefatch daraing
-          onSaveDrawing();
+          setTimeout(() => {
+            onSaveDrawing();
+          }, 300);
         })
         .catch((err) => {
           setLoading(false);
@@ -159,7 +160,7 @@ const DrawingCanvas = ({ activeTool, color, onSaveDrawing }) => {
       canvas.clear();
     }
   };
-  
+
   return (
     <div className="relative border border-gray-300 h-screen ">
       <div className="absolute end-3  flex top-3 gap-4">

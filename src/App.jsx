@@ -19,7 +19,7 @@ const App = () => {
     <div className="grid grid-cols-8">
       {/* react hot toast component */}
       <Toaster position="top-center" reverseOrder={false} />
-      <div className=" col-span-2  h-screen bg-gray-100">
+      <div className=" col-span-2  h-screen bg-gray-100 overflow-auto">
         <DrawingToolbar setActiveTool={setActiveTool} setColor={setColor} />
         {/* drawing list items */}
         <DrawingList  reFetch={refetchDrawingList} />
