@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { MdDelete } from "react-icons/md";
-import ListSkeleton from "../common/list_skeleton";
+import { baseURL } from "../../constant/util";
+import DrawingView from "../DrawingView/DrawingView";
+import ListSkeleton from "../common/Skeleton/List_skeleton";
 
 const DrawingCard = ({ drawing, handleDelete, loading }) => {
+  const [singleDrawing, setSingleDrawing] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+
+  // get single drawing data after click the drawing list
   const handleList = (id) => {
-    console.log(id);
+    fetch(`${baseURL}/drawing/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSingleDrawing(data);
+        openModal()
+      });
+  };
+
+  //   modal open and close handler
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -49,6 +68,14 @@ const DrawingCard = ({ drawing, handleDelete, loading }) => {
           </button>
         </div>
       )}
+      {/* drawing details view */}
+      <DrawingView
+        singleDrawing={singleDrawing}
+        openModal={openModal}
+        closeModal={closeModal}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </>
   );
 };
