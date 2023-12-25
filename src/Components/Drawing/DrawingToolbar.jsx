@@ -1,5 +1,8 @@
 import { FaPencilAlt } from "react-icons/fa";
-import { MdOutlineCheckBoxOutlineBlank, MdOutlineColorLens } from "react-icons/md";
+import {
+  MdOutlineCheckBoxOutlineBlank,
+  MdOutlineColorLens,
+} from "react-icons/md";
 import { FaTextHeight } from "react-icons/fa";
 import { useState } from "react";
 import { ChromePicker } from "react-color";
@@ -54,6 +57,7 @@ const DrawingToolbar = ({ setActiveTool, setColor }) => {
 
         {/* Color Picker Button */}
         <button
+          style={{ border: `2px solid ${selectedColor}` }}
           className={`mr-2 p-2 border rounded flex items-center gap-2 ${
             showColorPicker ? "bg-blue-200" : ""
           }`}
