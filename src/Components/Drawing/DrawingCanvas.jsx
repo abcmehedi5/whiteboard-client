@@ -4,8 +4,9 @@ import { baseURL } from "../../constant/util";
 import { IoIosSave } from "react-icons/io";
 import { imageUpload } from "../../../util/imageUpload";
 import toast from "react-hot-toast";
-const DrawingCanvas = ({ activeTool, color = "black" }) => {
+const DrawingCanvas = ({ activeTool, color }) => {
   const [isCanvasInitialized, setIsCanvasInitialized] = useState(false);
+  const [loading, setLoading] = useState(false);
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -107,6 +108,7 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
 
   // handle save drawing in database
   const handleSaveDrawing = async () => {
+    setLoading(true);
     if (!isCanvasInitialized) return;
 
     const canvas = canvasRef.current;
@@ -136,9 +138,11 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
         })
       )
         .then((response) => {
+          setLoading(false);
           toast.success("Drawing saved");
         })
         .catch((err) => {
+          setLoading(false);
           toast.error("something worng");
         });
     });
@@ -147,10 +151,11 @@ const DrawingCanvas = ({ activeTool, color = "black" }) => {
   return (
     <div className="relative border border-gray-300 h-screen">
       <button
+        disabled={loading}
         className="bg-slate-500 p-2  text-white rounded flex items-center absolute end-3  top-3 gap-1"
         onClick={() => handleSaveDrawing()}
       >
-        Save
+        {loading ? "Loading..." : "Save"}
         <span>
           <IoIosSave />
         </span>

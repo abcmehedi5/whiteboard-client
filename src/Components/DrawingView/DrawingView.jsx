@@ -2,6 +2,7 @@ import { FaDownload } from "react-icons/fa";
 import Modal from "../common/Modal/Modal";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const DrawingView = ({
   singleDrawing,
@@ -49,6 +50,7 @@ const DrawingView = ({
           // Clean up
           URL.revokeObjectURL(link.href);
           setLoading(false);
+          toast.success("Drawing Download Successfull!");
         };
       })
       .catch((error) => {
@@ -78,9 +80,7 @@ const DrawingView = ({
         onClick={handleDownload}
         className="mt-4 flex items-center gap-2 bg-purple-400 p-2 rounded-lg text-white"
       >
-         {   
-        loading ? 'Please Wait...' : 'Download' 
-        }
+        {loading ? "Please Wait..." : "Download"}
         <span>
           <FaDownload />
         </span>
