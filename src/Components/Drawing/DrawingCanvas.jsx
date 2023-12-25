@@ -45,7 +45,7 @@ const DrawingCanvas = ({ activeTool, color, onSaveDrawing }) => {
             height: 50,
             fill: color,
             strokeWidth: 2,
-            stroke: "black",
+            stroke: color,
           });
           canvas.add(rect);
           break;
