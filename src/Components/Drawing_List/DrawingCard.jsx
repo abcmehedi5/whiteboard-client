@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEdit } from "react-icons/md";
 import { baseURL } from "../../constant/util";
 import DrawingView from "../DrawingView/DrawingView";
 import ListSkeleton from "../common/Skeleton/List_skeleton";
 
-const DrawingCard = ({ drawing, handleDelete, loading }) => {
+const DrawingCard = ({ drawing, handleDelete, loading, handleUpdateModal }) => {
   const [singleDrawing, setSingleDrawing] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [loadingModal, setLoadingModal] = useState(false);
@@ -47,7 +47,7 @@ const DrawingCard = ({ drawing, handleDelete, loading }) => {
           >
             <img src={drawing.drawing} className="h-12, w-12 border-1" />
             <div>
-              <h4 className="text-lg">{drawing?.type}</h4>
+              <h4 className="text-lg">{drawing?.type.slice(0, 8)}...</h4>
               <h6 className="text-sm text-gray-400">
                 {new Date(drawing?.date)
                   .toISOString()
@@ -63,20 +63,40 @@ const DrawingCard = ({ drawing, handleDelete, loading }) => {
               <span className="text-gray-400">Please Wait..</span>
             )}
           </h1>
-          <button
-            onClick={() => {
-              handleDelete(drawing?._id);
-            }}
-          >
-            <MdDelete
-              style={{
-                fontSize: "20px",
-                background: "white",
-                borderRadius: "50%",
-                padding: "3px",
+
+          {/* delete and update action button  */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                handleUpdateModal(drawing?._id);
               }}
-            />
-          </button>
+            >
+              <MdEdit
+                style={{
+                  fontSize: "20px",
+                  background: "green",
+                  borderRadius: "50%",
+                  padding: "3px",
+                  color: "white",
+                }}
+              />
+            </button>
+            <button
+              onClick={() => {
+                handleDelete(drawing?._id);
+              }}
+            >
+              <MdDelete
+                style={{
+                  fontSize: "20px",
+                  background: "red",
+                  borderRadius: "50%",
+                  padding: "3px",
+                  color: "white",
+                }}
+              />
+            </button>
+          </div>
         </div>
       )}
       {/* drawing details view */}

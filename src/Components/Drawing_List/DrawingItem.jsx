@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { baseURL } from "../../constant/util";
 import DrawingCard from "./DrawingCard";
 import toast from "react-hot-toast";
+import DrawingUpdateModal from "./DrawingUpdateModal";
 const DrawingList = ({ reFetch }) => {
   // local state
   const [drawings, setDrawings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [drawingId, setDrawingId] = useState("");
 
   // fetch all list items
   useEffect(() => {
@@ -21,7 +24,7 @@ const DrawingList = ({ reFetch }) => {
   // delete drawing list
   const handleDelete = (id) => {
     // confirmation alert
-    const isConfirm = confirm('Want to delete?');
+    const isConfirm = confirm("Want to delete?");
     if (isConfirm) {
       fetch(`${baseURL}/drawing/${id}`, {
         method: "DELETE",
@@ -37,6 +40,37 @@ const DrawingList = ({ reFetch }) => {
         });
     }
   };
+
+  // hendel update
+  const handleUpdate = (data) => {
+    if (data === "") {
+      return toast.error("input field should be not empty!");
+    }
+    fetch(`${baseURL}/drawing/${drawingId}`, {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ type: data }),
+    })
+      .then((res) => {
+        toast.success("update successfull");
+        reFetch();
+        closeModal();
+      })
+      .catch((error) => {
+        toast.error("something worng");
+      });
+  };
+
+  // modal action handler
+  const handleUpdateModal = (id) => {
+    setIsOpen(true);
+    setDrawingId(id);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+    setDrawingId("");
+  };
+
   return (
     <div>
       {drawings?.map((drawing, key) => (
@@ -44,9 +78,18 @@ const DrawingList = ({ reFetch }) => {
           loading={loading}
           drawing={drawing}
           handleDelete={handleDelete}
+          handleUpdateModal={handleUpdateModal}
           key={key}
         />
       ))}
+      {/* drawing update modal */}
+      <DrawingUpdateModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        closeModal={closeModal}
+        handleUpdate={handleUpdate}
+        handleUpdateModal={handleUpdateModal}
+      />
     </div>
   );
 };
