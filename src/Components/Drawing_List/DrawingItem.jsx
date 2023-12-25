@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { baseURL } from "../../constant/util";
 import DrawingCard from "./DrawingCard";
 import toast from "react-hot-toast";
-const DrawingList = () => {
+const DrawingList = ({ reFetch }) => {
   // local state
   const [drawings, setDrawings] = useState([]);
-  const [reFetch, setReFetch] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // fetch all list items
@@ -15,25 +14,28 @@ const DrawingList = () => {
       .then((res) => res.json())
       .then((data) => {
         setDrawings(data);
-        setReFetch(false);
         setLoading(false);
       });
   }, [reFetch]);
 
   // delete drawing list
   const handleDelete = (id) => {
-    fetch(`${baseURL}/drawing/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (res.ok) {
-          toast.success("delete successfull");
-          setReFetch(true);
-        }
+    // confirmation alert
+    const isConfirm = confirm('Want to delete?');
+    if (isConfirm) {
+      fetch(`${baseURL}/drawing/${id}`, {
+        method: "DELETE",
       })
-      .catch((err) => {
-        toast.error("something worng");
-      });
+        .then((res) => {
+          if (res.ok) {
+            toast.success("delete successfull");
+            reFetch();
+          }
+        })
+        .catch((err) => {
+          toast.error("something worng");
+        });
+    }
   };
   return (
     <div>

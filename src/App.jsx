@@ -7,6 +7,13 @@ import { Toaster } from "react-hot-toast";
 const App = () => {
   const [activeTool, setActiveTool] = useState("");
   const [color, setColor] = useState("black");
+  // for refetch drawing list
+  const [shouldRefetchList, setShouldRefetchList] = useState(false);
+
+  const refetchDrawingList = () => {
+    setShouldRefetchList(prev => !prev);
+  };
+
 
   return (
     <div className="grid grid-cols-8">
@@ -15,10 +22,10 @@ const App = () => {
       <div className=" col-span-2  h-screen bg-gray-100">
         <DrawingToolbar setActiveTool={setActiveTool} setColor={setColor} />
         {/* drawing list items */}
-        <DrawingList />
+        <DrawingList  reFetch={refetchDrawingList} />
       </div>
       <div className="col-span-6">
-        <DrawingCanvas activeTool={activeTool} color={color} />
+        <DrawingCanvas activeTool={activeTool} color={color} onSaveDrawing={refetchDrawingList} />
       </div>
     </div>
   );

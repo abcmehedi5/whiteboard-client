@@ -4,7 +4,7 @@ import { baseURL } from "../../constant/util";
 import { IoIosSave } from "react-icons/io";
 import { imageUpload } from "../../../util/imageUpload";
 import toast from "react-hot-toast";
-const DrawingCanvas = ({ activeTool, color }) => {
+const DrawingCanvas = ({ activeTool, color, onSaveDrawing }) => {
   const [isCanvasInitialized, setIsCanvasInitialized] = useState(false);
   const [loading, setLoading] = useState(false);
   const canvasRef = useRef(null);
@@ -140,6 +140,8 @@ const DrawingCanvas = ({ activeTool, color }) => {
         .then((response) => {
           setLoading(false);
           toast.success("Drawing saved");
+          // refefatch daraing
+          onSaveDrawing();
         })
         .catch((err) => {
           setLoading(false);
